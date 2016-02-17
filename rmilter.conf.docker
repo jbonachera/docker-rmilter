@@ -1,0 +1,7 @@
+# sysvinit-specific settings for rmilter
+
+bind_socket = inet:11332@0.0.0.0;
+.include /etc/rmilter/rmilter.conf.common 
+
+#bind_socket = unix:/var/run/rmilter/rmilter.sock;
+
