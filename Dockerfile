@@ -1,6 +1,6 @@
 FROM jbonachera/consul-template
 MAINTAINER Julien BONACHERA <julien@bonachera.fr>
-RUN curl -sLo /etc/yum.repos.d/rspamd.repo http://rspamd.com/rpm-stable/fedora-22/rspamd.repo
+RUN curl -sLo /etc/yum.repos.d/rspamd.repo http://rspamd.com/rpm-stable/fedora-23/rspamd.repo
 RUN rpm --import https://rspamd.com/rpm-stable/gpg.key
 RUN dnf install -y rmilter libopendkim
 EXPOSE 11332
