@@ -96,35 +96,27 @@ spamd {
   rspamd_metric = "default";
 };
 
-memcached {
+redis {
   # servers_grey - memcached servers for greylisting in format:
   # host[:port][, host[:port]]
   # It is possible to make memcached mirroring, its syntax is {server1, server2}
-  {{ if service "memcached" }}
-  servers_grey = {{ range service "memcached" }}{{.Address}}:{{.Port}} {{end}};
+  {{ if service "redis" }}
+  servers_grey = {{ range service "redis" }}{{.Address}}:{{.Port}} {{end}};
 
   # servers_white - memcached servers for whitelisting in format similar to that is used
   # in servers_grey
   # servers_white = {localhost, mcgi12.example.com}, mcgi18.example.com:11211;
   
   # servers_limits - memcached servers used for limits storing, can not be mirrored
-  servers_limits = {{ range service "memcached" }}{{.Address}}:{{.Port}} {{end}};
+  servers_limits = {{ range service "redis" }}{{.Address}}:{{.Port}} {{end}};
 
   # servers_id - memcached servers used for message id storing, can not be mirrored
-  servers_id = {{ range service "memcached" }}{{.Address}}:{{.Port}} {{end}};
+  servers_id = {{ range service "redis" }}{{.Address}}:{{.Port}} {{end}};
   {{ end }}
   # id_prefix - prefix for extracting message ids from memcached
   # Default: empty (no prefix is prepended to key)
   id_prefix = "message_id.";
   
-  # grey_prefix - prefix for extracting greylisted records from memcached
-  # Default: empty (no prefix is prepended to key)
-  grey_prefix = "grey.";
-
-  # id_prefix - prefix for extracting whitelisted records from memcached
-  # Default: empty (no prefix is prepended to key)
-  white_prefix = "white.";
-
   # connect_timeout - timeout in miliseconds for waiting for memcached
   # Default: 1s
   connect_timeout = 1s;
@@ -142,9 +134,6 @@ memcached {
   # Default: 10
   maxerrors = 10;
 
-  # protocol - protocol that is using for connecting to memcached (tcp or udp)
-  # Default: udp
-  protocol = tcp;
 };
 
 # bind_socket - socket credits for local bind:
