@@ -3,7 +3,7 @@ ENTRYPOINT /sbin/entrypoint.sh
 MAINTAINER Julien BONACHERA <julien@bonachera.fr>
 ENV rmilter_VERSION="1.9.2"
 RUN pacman --noconfirm -S openssl libevent glib2 gmime luajit make cmake sqlite hiredis git gcc ragel base-devel libmilter opendkim && \
-    useradd -r _rmilter && \
+    useradd -r _rmilter -d /var/lib/rmilter && \
     mkdir /var/lib/rmilter && \
     chown _rmilter: /var/lib/rmilter && \
     git clone --branch $rmilter_VERSION --depth 1 --recursive https://github.com/vstakhov/rmilter.git /usr/local/src/rmilter && \
