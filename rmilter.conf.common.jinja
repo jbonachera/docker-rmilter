@@ -101,7 +101,7 @@ spamd {
   rspamd_metric = "default";
 };
 
-{{ if USE_REDIS }}
+{% if USE_REDIS %}
 redis {
   servers_white = {{ REDIS_HOST }}:6379;
   servers_limits = {{ REDIS_HOST }}:6379;
@@ -133,7 +133,7 @@ redis {
 
 };
 
-{{ end }}
+{% endif %}
 # bind_socket - socket credits for local bind:
 # unix:/path/to/file - bind to local socket
 # inet:port@host - bind to inet socket
