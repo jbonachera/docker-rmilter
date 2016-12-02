@@ -1,7 +1,7 @@
 FROM jbonachera/arch
 ENTRYPOINT /sbin/entrypoint.sh
 MAINTAINER Julien BONACHERA <julien@bonachera.fr>
-ENV rmilter_VERSION="1.9.2"
+ENV rmilter_VERSION="1.10.0"
 RUN pacman --noconfirm -S openssl libevent glib2 gmime luajit make cmake sqlite hiredis git gcc ragel base-devel libmilter opendkim && \
     useradd -r _rmilter -d /var/lib/rmilter && \
     mkdir /var/lib/rmilter && \
