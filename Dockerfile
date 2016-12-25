@@ -1,11 +1,28 @@
-FROM jbonachera/consul-template
+FROM jbonachera/arch
+ENTRYPOINT /sbin/entrypoint.sh
 MAINTAINER Julien BONACHERA <julien@bonachera.fr>
-RUN curl -sLo /etc/yum.repos.d/rspamd.repo http://rspamd.com/rpm-stable/fedora-23/rspamd.repo
-RUN rpm --import https://rspamd.com/rpm-stable/gpg.key
-RUN dnf install -y rmilter libopendkim && dnf clean all
+ENV rmilter_VERSION="1.10.0"
+RUN pacman --noconfirm -S openssl libevent glib2 gmime luajit make cmake sqlite hiredis git gcc ragel base-devel libmilter opendkim && \
+    useradd -r _rmilter -d /var/lib/rmilter && \
+    mkdir /var/lib/rmilter && \
+    chown _rmilter: /var/lib/rmilter && \
+    git clone --branch $rmilter_VERSION --depth 1 --recursive https://github.com/vstakhov/rmilter.git /usr/local/src/rmilter && \
+    cd /usr/local/src/ && \
+    mkdir rmilter.build && \
+    cd rmilter.build && \
+    cmake -DNO_SHARED=ON -DCMAKE_INSTALL_PREFIX=/usr \
+          -DCONFDIR=/etc/rmilter -DRUNDIR=/run/rmilter \
+          -DLOGDIR=/var/log/rmilter -Drmilter_USER='_rmilter' \
+          -DDBDIR=/var/lib/rmilter -DWANT_SYSTEMD_UNITS=OFF \
+          ../rmilter && \
+    make && \
+    make install && \
+    cd ~ && \
+    rm -rf /usr/local/src/rmilter && \
+    pacman -R --noconfirm cmake  gcc git libmilter
+
 RUN mkdir /var/run/rmilter && chown _rmilter: /var/run/rmilter
 EXPOSE 11332
 RUN mkdir /etc/dkim
-COPY fake_syslog.ini /etc/fake_syslog.ini
-COPY fake_syslog.py /usr/local/bin/fake_syslog.py
 COPY rmilter.conf.* /etc/rmilter/
+COPY entrypoint.sh /sbin/entrypoint.sh

@@ -56,7 +56,7 @@ spamd {
   # sockets are separated by ','
   # is server name is prefixed with r: it is rspamd server
   # Default: empty
-  servers = {{ range service "rspamd" }}r:{{.Address}}:{{.Port}} {{end}};
+  servers = r:{{ RSPAMD_HOST }}:11333;
   spamd_soft_fail = no;
   spamd_greylist = yes;
   extended_spam_headers = yes;
@@ -101,11 +101,11 @@ spamd {
   rspamd_metric = "default";
 };
 
-{{ if service "redis" }}
+{% if USE_REDIS %}
 redis {
-  servers_white = {{ range service "redis" }}{{.Address}}:{{.Port}} {{end}};
-  servers_limits = {{ range service "redis" }}{{.Address}}:{{.Port}} {{end}};
-  servers_id = {{ range service "redis" }}{{.Address}}:{{.Port}} {{end}};
+  servers_white = {{ REDIS_HOST }}:6379;
+  servers_limits = {{ REDIS_HOST }}:6379;
+  servers_id = {{ REDIS_HOST }}:6379;
   # id_prefix - prefix for extracting message ids from memcached
   # Default: empty (no prefix is prepended to key)
   id_prefix = "message_id.";
@@ -133,7 +133,7 @@ redis {
 
 };
 
-{{ end }}
+{% endif %}
 # bind_socket - socket credits for local bind:
 # unix:/path/to/file - bind to local socket
 # inet:port@host - bind to inet socket
