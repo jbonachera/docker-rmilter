@@ -193,26 +193,7 @@ limits {
 
 
 dkim {
- # Sample for dkim specific keys
- domain {
-   key = /etc/dkim;
-   domain = "example.com";
-   selector = "dkim";
- };
- # domain {
- #   key = /etc/dkim/dkim_test.key;
- #   domain = "test.com";
- # selector = "dkim";
- # };
- # Universal selector, keys will be checked for pattern /etc/dkim/<domain>.<selector>.key
- domain {
-   key = /etc/dkim;
-   domain = "*";
-   selector = "omail";
- };
- #  header_canon = relaxed;
- #  body_canon = relaxed;
- #  sign_alg = sha256;
+  enable = false;
 };
 
 
